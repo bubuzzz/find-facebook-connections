@@ -2,6 +2,9 @@ from selenium import webdriver
 import requests
 from bs4 import BeautifulSoup
 
+facebook_url = 'https://m.facebook.com/'
+DEPTH = 3
+
 def login_firefox():
     firefox_profile = webdriver.FirefoxProfile()
     driver          = webdriver.Firefox(firefox_profile=firefox_profile)
@@ -20,44 +23,40 @@ def login_firefox():
     return cookies
 
 def parse_cookies(cookies):
-    formatted= {}
+    formatted = {}
     for cook in cookies:
         formatted[cook['name']] = cook['value']
 
     return formatted
 
 def extract_friends(raw_html):
-    content   = BeautifulSoup(raw_html).find('div', {"id": "root"})
-    links     = content.find_all("a")
-
     friends   = {}
     next_link = None
 
+    content   = BeautifulSoup(raw_html).find('div', {"id": "root"})
+    links     = content.find_all("a")
+
     for l in links:
-        href     = l['href']
+        href = l['href']
         if 'fref=fr_tab' in str(href):
-            user = {}
-            username = href[1:].split('?')[0]
-            friends[href] = l.text
+            friends[href] = {'name': l.text, 'friends': {}}
         if "See more friends" in str(l):
             next_link = href
 
     return friends, next_link
 
-def get_friends_of(username, cookies):
+def get_friends_of(friend_url, cookies):
     startidx = 0
     friends  = {}
     done     = False
-    facebook_url = 'https://m.facebook.com/'
-    url =  facebook_url + username + '/friends'
     while not done:
-        r = requests.get(url, cookies=cookies)
+        r = requests.get(friend_url, cookies=cookies)
         new_friends, next_link = extract_friends(r.text)
         friends.update(new_friends)
         if next_link == None:
             done =  True
         else:
-            url = facebook_url + next_link
+            friend_url = facebook_url + next_link
 
     return friends
 
@@ -66,6 +65,9 @@ def crawl_friends():
     cookies     = parse_cookies(raw_cookies)
     r           = requests.get('https://m.facebook.com/me', cookies = cookies)
     username    = r.url.split('/')[-1].split('?')[0]
+    url =  facebook_url + username + '/friends'
 
-    return get_friends_of(username, cookies)
+    friends = get_friends_of(url, cookies)
+    print friends
+
 
