@@ -41,7 +41,7 @@ def extract_friends(raw_html):
 
     for l in links:
         href = l.get('href')
-        if href and 'fref=fr_tab' in str(href):
+        if href and 'fref=fr_tab' in href.encode("utf-8"):
             username = href[1:].replace('?fref=fr_tab', '')
             friends[username] = {'name': l.text, 'username': username}
         if "See more friends" in str(l):
