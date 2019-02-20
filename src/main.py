@@ -7,10 +7,10 @@ class Node:
         self.username = username
         self.name = name
 
+cookies = None
 
 class FBTree:
-    cookies = None
-    solution_required = 1  # NUMBER FRIENDS REQUIRED
+    solution_required = 3  # NUMBER FRIENDS REQUIRED
     client = FacebookClient(cookies)
 
     def __init__(self):
@@ -22,7 +22,7 @@ class FBTree:
 
     def set_goals(self, username):
         children = self.client.get_children(username)
-        self.goals = children.values()
+        self.goals = children.keys()
         print 'goals: ', self.goals
 
     def is_goal(self, username):
@@ -36,6 +36,6 @@ class FBTree:
 if __name__ == '__main__':
     # crawl_friends()
     tree = FBTree()
-    tree.set_goals("kenichi.ogw")
+    tree.set_goals("phithihaiau")
     results = bfs(tree)
-    # print results
+    print 'result: ', results
