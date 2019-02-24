@@ -1,4 +1,5 @@
 from collections import deque
+from pprint import pprint
 
 
 def bfs(tree):
@@ -16,26 +17,32 @@ def bfs(tree):
 
     while processing_nodes:
         current_node = processing_nodes.popleft()
-        if visited_nodes.get(current_node.get('username')):
+        current_username = current_node.username
+        if visited_nodes.get(current_username):
             continue
 
-        print('processing: ', current_node.get('username'))    
+        print '\nupdated tree: '
+        pprint(root.parse_tree_to_json())
 
-        if tree.is_goal(current_node.get('username')):
-            found_path = construct_path(current_node.get('username'), parent_map)
+        print 'processing: ', current_username
+        if tree.is_goal(current_username):
+            found_path = construct_path(current_username, parent_map)
             result_set.append(found_path)
             if len(result_set) == tree.solution_required:
+                print '\n Final tree:'
+                pprint(root.parse_tree_to_json())
                 return result_set
 
-        for child in tree.get_children(current_node.get('username')):
-            # print('--child: ', child)
-            if visited_nodes.get(child.get('username')):
-                continue
+        children = tree.get_children(current_username)
+        for idx, child in enumerate(children):
+            if visited_nodes.get(child.username):
+                del children[idx]
             else:
-                parent_map[child.get('username')] = current_node.get('username')
+                parent_map[child.username] = current_username
                 processing_nodes.append(child)
+                current_node.children = children
 
-        visited_nodes[current_node.get('username')] = True
+        visited_nodes[current_username] = True
 
 
 def construct_path(node_id, parent_map):
@@ -45,5 +52,5 @@ def construct_path(node_id, parent_map):
         node_id = parent_map[node_id]
         path.append(node_id)
     path.reverse()
-    print('found path: ', path)
-    return path
+    print('FOUND PATH: ', path)
+    return str(path)
