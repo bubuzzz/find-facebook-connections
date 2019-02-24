@@ -4,6 +4,7 @@ from selenium import webdriver
 
 facebook_url = 'https://m.facebook.com/'
 DEPTH = 3
+FACEBOOK_FRIENDS_THRESHOLD = 100
 
 
 def login_firefox():
@@ -36,7 +37,7 @@ def extract_friends(raw_html):
     friends = {}
     next_link = None
 
-    content = BeautifulSoup(raw_html).find('div', {"id": "root"})
+    content = BeautifulSoup(raw_html, features="html.parser").find('div', {"id": "root"})
     links = content.find_all("a")
 
     for l in links:
@@ -58,7 +59,7 @@ def get_friends_of(friend_url, cookies):
         r = requests.get(friend_url, cookies=cookies)
         new_friends, next_link = extract_friends(r.text)
         friends.update(new_friends)
-        if next_link == None:
+        if next_link is None or len(friends) >= FACEBOOK_FRIENDS_THRESHOLD:
             done = True
         else:
             friend_url = facebook_url + next_link
@@ -78,6 +79,22 @@ def crawl_friends():
     print friends
 
 
+class Node:
+    def __init__(self, username, children=None):
+        self.username = username
+        self.children = children
+
+    def parse_tree_to_json(self):
+        js = dict()
+        current = js[self.username] = dict()
+        friends = current['friends'] = dict()
+        children = self.children
+        if children:
+            for child in children:
+                friends.update(child.parse_tree_to_json())
+        return js
+
+
 class FacebookClient:
     def __init__(self, cookies=None):
         if cookies:
@@ -90,9 +107,10 @@ class FacebookClient:
 
     def get_children(self, username):
         url = facebook_url + username + '/friends'
-        return get_friends_of(url, self.cookies)
+        friends = get_friends_of(url, self.cookies)
+        return [Node(item) for item in friends.keys()]
 
     def get_myself_username(self):
         r = requests.get('https://m.facebook.com/me', cookies=self.cookies)
         username = r.url.split('/')[-1].split('?')[0]
-        return {'username': username}
+        return Node(username)

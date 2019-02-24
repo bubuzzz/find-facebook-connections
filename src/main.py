@@ -1,13 +1,8 @@
-from facebook import FacebookClient
 from algorithms import bfs
-
-
-class Node:
-    def __init__(self, username, name=None):
-        self.username = username
-        self.name = name
+from facebook import FacebookClient
 
 cookies = None
+
 
 class FBTree:
     solution_required = 3  # NUMBER FRIENDS REQUIRED
@@ -22,15 +17,14 @@ class FBTree:
 
     def set_goals(self, username):
         children = self.client.get_children(username)
-        self.goals = children.keys()
+        self.goals = [child.username for child in children]
         print 'goals: ', self.goals
 
     def is_goal(self, username):
         return True if username in self.goals else False
 
     def get_children(self, username):
-        children = self.client.get_children(username)
-        return children.values()
+        return self.client.get_children(username)
 
 
 if __name__ == '__main__':
@@ -38,4 +32,4 @@ if __name__ == '__main__':
     tree = FBTree()
     tree.set_goals("phithihaiau")
     results = bfs(tree)
-    print 'result: ', results
+    print 'result paths:\n', '\n'.join(results)
