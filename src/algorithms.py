@@ -1,16 +1,13 @@
 from collections import deque
 from pprint import pprint
-
+from util import draw_tree
 
 def bfs(tree):
     # a FIFO to store current nodes
     processing_nodes = deque()
-
-    visited_nodes = dict()
-
-    parent_map = dict()
-
-    result_set = list()
+    visited_nodes    = dict()
+    parent_map       = dict()
+    result_set       = list()
 
     root = tree.get_root()
     processing_nodes.append(root)
@@ -22,6 +19,8 @@ def bfs(tree):
             continue
 
         print '\nupdated tree: '
+
+        # draw_tree(root)
         pprint(root.parse_tree_to_json())
 
         print 'processing: ', current_username

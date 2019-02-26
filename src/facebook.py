@@ -4,7 +4,7 @@ from selenium import webdriver
 
 facebook_url = 'https://m.facebook.com/'
 DEPTH = 3
-FACEBOOK_FRIENDS_THRESHOLD = 100
+FACEBOOK_FRIENDS_THRESHOLD = 50
 
 
 def login_firefox():
@@ -105,10 +105,10 @@ class FacebookClient:
             self.cookies = parse_cookies(raw_cookies)
             print "cookies: ", self.cookies
 
-    def get_children(self, username):
+    def get_friends(self, username):
         url = facebook_url + username + '/friends'
         friends = get_friends_of(url, self.cookies)
-        return [Node(item) for item in friends.keys()]
+        return [Node(friend_username) for friend_username in friends.keys()]
 
     def get_myself_username(self):
         r = requests.get('https://m.facebook.com/me', cookies=self.cookies)
