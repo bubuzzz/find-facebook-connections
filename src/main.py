@@ -1,10 +1,11 @@
 from algorithms import bfs
 from facebook import FacebookClient
+from constants import TARGET
 
 cookies = None
 
 class FBTree:
-    solution_required = 3  # NUMBER MUTUAL FRIENDS REQUIRED
+    solution_required = 1  # NUMBER MUTUAL FRIENDS REQUIRED
     client = FacebookClient(cookies)
 
     def __init__(self):
@@ -34,6 +35,9 @@ class FBTree:
 
 if __name__ == '__main__':
     tree = FBTree()
-    tree.set_goals("kien.ngotrung.965")
+    tree.set_goals(TARGET)
     results = bfs(tree)
-    print 'result paths:\n', '\n'.join(results)
+
+    print '------------------------------------------'
+    print "RESULT PATHS: %s\n" % '\n'.join(results)
+    print '------------------------------------------'

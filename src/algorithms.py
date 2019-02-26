@@ -26,10 +26,10 @@ def bfs(tree):
             print 'User %s has been visited. Moving on' % current_username
             continue
 
-        print_tree(tree)
-
         # Expand the tree to the next level of the children list
         children = tree.get_children(current_username)
+
+        print_tree(tree)
 
         for idx, child in enumerate(children):
             # if any child already in the visited nodes, remove that child
