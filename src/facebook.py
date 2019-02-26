@@ -86,7 +86,7 @@ def crawl_friends():
     raw_cookies = login_firefox()
     cookies = parse_cookies(raw_cookies)
 
-    r = requests.get('https://m.facebook.com/me', cookies=cookies)
+    r = requests.get('%sme' % FACEBOOK_MAIN_URL, cookies=cookies)
     username = r.url.split('/')[-1].split('?')[0]
     url = FACEBOOK_URL + username + '/friends'
 
