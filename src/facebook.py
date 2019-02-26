@@ -8,6 +8,9 @@ FACEBOOK_FRIENDS_THRESHOLD = 50
 
 
 def login_firefox():
+    """
+    Use Selenium to open firefox and wait for user to login
+    """
     firefox_profile = webdriver.FirefoxProfile()
     driver = webdriver.Firefox(firefox_profile=firefox_profile)
     driver.get("http://www.facebook.com")
@@ -26,6 +29,9 @@ def login_firefox():
 
 
 def parse_cookies(cookies):
+    """
+    Parse the cookies from selenium to the correct format of Facebook
+    """
     formatted = {}
     for cook in cookies:
         formatted[cook['name']] = cook['value']
@@ -34,6 +40,10 @@ def parse_cookies(cookies):
 
 
 def extract_friends(raw_html):
+    """
+    Extract the friend list of the current friend page. Return the friend list
+    and the next pagination link
+    """
     friends = {}
     next_link = None
 
@@ -52,6 +62,10 @@ def extract_friends(raw_html):
 
 
 def get_friends_of(friend_url, cookies):
+    """
+    Go to the friend page of a user, then continue to navigate through the
+    list of the friend
+    """
     startidx = 0
     friends = {}
     done = False
