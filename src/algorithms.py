@@ -18,24 +18,22 @@ def bfs(tree):
 
     while processing_nodes:
         print '-----------------------------------------'
-        current_node = processing_nodes.popleft()
+        current_node     = processing_nodes.popleft()
         current_username = current_node.username
+        print 'Processing: %s' % current_username
+
         if visited_nodes.get(current_username):
             print 'User %s has been visited. Moving on' % current_username
             continue
 
         print_tree(tree)
-        print 'Processing: %s' % current_username
 
-        if tree.is_goal(current_username):
-            found_path = construct_path(current_username, parent_map)
-            result_set.append(found_path)
-            if len(result_set) == SOLUTION_REQUIRED:
-                print_tree(tree)
-                return result_set
-
+        # Expand the tree to the next level of the children list
         children = tree.get_children(current_username)
+
         for idx, child in enumerate(children):
+            # if any child already in the visited nodes, remove that child
+            # from the children list
             if visited_nodes.get(child.username):
                 del children[idx]
             else:
@@ -45,8 +43,16 @@ def bfs(tree):
 
         visited_nodes[current_username] = True
 
+        if tree.is_goal(current_username):
+            found_path = construct_path(current_username, parent_map)
+            result_set.append(found_path)
+            if len(result_set) == SOLUTION_REQUIRED:
+                print_tree(tree)
+                return result_set
+
 
 def construct_path(node_id, parent_map):
+    print node_id
     path = list()
     path.append(node_id)
     while parent_map.get(node_id):
