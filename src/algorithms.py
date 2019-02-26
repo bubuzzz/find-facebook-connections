@@ -16,12 +16,14 @@ def bfs(tree):
         current_node = processing_nodes.popleft()
         current_username = current_node.username
         if visited_nodes.get(current_username):
+            print 'User %s has been visited. Moving on' % current_username
             continue
 
-        print '\nupdated tree: '
 
-        # draw_tree(root)
-        pprint(root.parse_tree_to_json())
+        print '-----------------------------------------'
+        print '\nCurrent tree: '
+        print draw_tree(root.parse_tree_to_json())
+        print '-----------------------------------------'
 
         print 'processing: ', current_username
         if tree.is_goal(current_username):
