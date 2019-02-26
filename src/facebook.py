@@ -1,11 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
-
-FACEBOOK_URL = 'https://m.facebook.com/'
-FACEBOOK_MAIN_URL = "https://www.facebook.com/"
-DEPTH = 3
-FACEBOOK_FRIENDS_THRESHOLD = 50
+from constants import *
 
 
 def login_firefox():
@@ -82,12 +78,21 @@ def get_friends_of(friend_url, cookies):
     return friends
 
 
+
 class Node:
+    """
+    Hold the nested children and provide ways to parse the tree to
+    dict
+    """
+
     def __init__(self, username, children=None):
         self.username = username
         self.children = children
 
     def generate_tree(self):
+        """
+        Parse the nested node into dict
+        """
         tree     = dict()
         current  = tree[self.username] = dict()
         friends  = current['friends'] = dict()
@@ -100,6 +105,8 @@ class Node:
 
 
 class FacebookClient:
+    """ A client to provide some services to connect to Facebook """
+
     def __init__(self, cookies=None):
         if cookies:
             self.cookies = cookies
@@ -110,11 +117,17 @@ class FacebookClient:
             print "Cookies: ", self.cookies
 
     def get_friends(self, username):
+        """
+        Crawl friends and update the node
+        """
         url = FACEBOOK_URL + username + '/friends'
         friends = get_friends_of(url, self.cookies)
         return [Node(friend_username) for friend_username in friends.keys()]
 
     def get_myself_username(self):
+        """
+        Get your own username node
+        """
         r = requests.get('%sme' % FACEBOOK_URL, cookies=self.cookies)
         username = r.url.split('/')[-1].split('?')[0]
         return Node(username)

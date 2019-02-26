@@ -1,5 +1,6 @@
 from collections import deque
 from util import draw_tree
+from constants import SOLUTION_REQUIRED
 
 def print_tree(tree):
     print 'Current tree: '
@@ -29,7 +30,7 @@ def bfs(tree):
         if tree.is_goal(current_username):
             found_path = construct_path(current_username, parent_map)
             result_set.append(found_path)
-            if len(result_set) == tree.solution_required:
+            if len(result_set) == SOLUTION_REQUIRED:
                 print_tree(tree)
                 return result_set
 
