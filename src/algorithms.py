@@ -1,6 +1,10 @@
 from collections import deque
 from util import draw_tree
 
+def print_tree(tree):
+    print 'Current tree: '
+    print draw_tree(tree.get_root().generate_tree())
+
 def bfs(tree):
     # a FIFO to store current nodes
     processing_nodes = deque()
@@ -12,24 +16,21 @@ def bfs(tree):
     processing_nodes.append(root)
 
     while processing_nodes:
+        print '-----------------------------------------'
         current_node = processing_nodes.popleft()
         current_username = current_node.username
         if visited_nodes.get(current_username):
             print 'User %s has been visited. Moving on' % current_username
             continue
 
-        print '-----------------------------------------'
-        print 'Current tree: '
-        print draw_tree(root.generate_tree())
-        print '-----------------------------------------'
+        print_tree(tree)
+        print 'Processing: %s' % current_username
 
-        print 'Processing: ', current_username
         if tree.is_goal(current_username):
             found_path = construct_path(current_username, parent_map)
             result_set.append(found_path)
             if len(result_set) == tree.solution_required:
-                print 'Final tree:'
-                print draw_tree(root.generate_tree())
+                print_tree(tree)
                 return result_set
 
         children = tree.get_children(current_username)

@@ -2,7 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-facebook_url = 'https://m.facebook.com/'
+FACEBOOK_URL = 'https://m.facebook.com/'
+FACEBOOK_MAIN_URL = "https://www.facebook.com/"
 DEPTH = 3
 FACEBOOK_FRIENDS_THRESHOLD = 50
 
@@ -13,7 +14,7 @@ def login_firefox():
     """
     firefox_profile = webdriver.FirefoxProfile()
     driver = webdriver.Firefox(firefox_profile=firefox_profile)
-    driver.get("http://www.facebook.com")
+    driver.get(FACEBOOK_MAIN_URL)
 
     while True:
         try:
@@ -76,7 +77,7 @@ def get_friends_of(friend_url, cookies):
         if next_link is None or len(friends) >= FACEBOOK_FRIENDS_THRESHOLD:
             done = True
         else:
-            friend_url = facebook_url + next_link
+            friend_url = FACEBOOK_URL + next_link
 
     return friends
 
@@ -87,7 +88,7 @@ def crawl_friends():
 
     r = requests.get('https://m.facebook.com/me', cookies=cookies)
     username = r.url.split('/')[-1].split('?')[0]
-    url = facebook_url + username + '/friends'
+    url = FACEBOOK_URL + username + '/friends'
 
     friends = get_friends_of(url, cookies)
     print friends
@@ -99,10 +100,11 @@ class Node:
         self.children = children
 
     def generate_tree(self):
-        tree = dict()
-        current = tree[self.username] = dict()
-        friends = current['friends'] = dict()
+        tree     = dict()
+        current  = tree[self.username] = dict()
+        friends  = current['friends'] = dict()
         children = self.children
+
         if children:
             for child in children:
                 friends.update(child.generate_tree())
@@ -120,11 +122,11 @@ class FacebookClient:
             print "Cookies: ", self.cookies
 
     def get_friends(self, username):
-        url = facebook_url + username + '/friends'
+        url = FACEBOOK_URL + username + '/friends'
         friends = get_friends_of(url, self.cookies)
         return [Node(friend_username) for friend_username in friends.keys()]
 
     def get_myself_username(self):
-        r = requests.get('https://m.facebook.com/me', cookies=self.cookies)
+        r = requests.get('%sme' % FACEBOOK_URL, cookies=self.cookies)
         username = r.url.split('/')[-1].split('?')[0]
         return Node(username)
