@@ -82,18 +82,6 @@ def get_friends_of(friend_url, cookies):
     return friends
 
 
-def crawl_friends():
-    raw_cookies = login_firefox()
-    cookies = parse_cookies(raw_cookies)
-
-    r = requests.get('%sme' % FACEBOOK_MAIN_URL, cookies=cookies)
-    username = r.url.split('/')[-1].split('?')[0]
-    url = FACEBOOK_URL + username + '/friends'
-
-    friends = get_friends_of(url, cookies)
-    print friends
-
-
 class Node:
     def __init__(self, username, children=None):
         self.username = username
