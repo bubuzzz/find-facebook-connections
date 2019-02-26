@@ -1,5 +1,4 @@
 from collections import deque
-from pprint import pprint
 from util import draw_tree
 
 def bfs(tree):
@@ -19,19 +18,18 @@ def bfs(tree):
             print 'User %s has been visited. Moving on' % current_username
             continue
 
-
         print '-----------------------------------------'
         print '\nCurrent tree: '
         print draw_tree(root.parse_tree_to_json())
         print '-----------------------------------------'
 
-        print 'processing: ', current_username
+        print 'Processing: ', current_username
         if tree.is_goal(current_username):
             found_path = construct_path(current_username, parent_map)
             result_set.append(found_path)
             if len(result_set) == tree.solution_required:
-                print '\n Final tree:'
-                pprint(root.parse_tree_to_json())
+                print '\nFinal tree:'
+                print draw_tree(root.parse_tree_to_json())
                 return result_set
 
         children = tree.get_children(current_username)
@@ -53,5 +51,5 @@ def construct_path(node_id, parent_map):
         node_id = parent_map[node_id]
         path.append(node_id)
     path.reverse()
-    print('FOUND PATH: ', path)
+    print 'FOUND PATH: %s' % path
     return str(path)
