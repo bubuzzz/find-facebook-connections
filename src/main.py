@@ -27,7 +27,7 @@ class FBTree:
         """
         Check if the new user is in the goals set
         """
-        return True if username in self.goals else False
+        return username in self.goals
 
     def get_children(self, username):
         return self.client.get_friends(username)
