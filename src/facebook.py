@@ -14,7 +14,7 @@ def login_firefox():
 
     while True:
         try:
-            loginSignifier = driver.find_element_by_class_name("innerWrap")
+            login_signifier = driver.find_element_by_class_name("innerWrap")
             break
         except:
             continue
