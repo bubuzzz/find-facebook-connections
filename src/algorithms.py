@@ -52,7 +52,6 @@ def bfs(tree):
 
 
 def construct_path(node_id, parent_map):
-    print node_id
     path = list()
     path.append(node_id)
     while parent_map.get(node_id):
