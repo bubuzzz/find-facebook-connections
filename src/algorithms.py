@@ -19,8 +19,8 @@ def bfs(tree):
             continue
 
         print '-----------------------------------------'
-        print '\nCurrent tree: '
-        print draw_tree(root.parse_tree_to_json())
+        print 'Current tree: '
+        print draw_tree(root.generate_tree())
         print '-----------------------------------------'
 
         print 'Processing: ', current_username
@@ -28,8 +28,8 @@ def bfs(tree):
             found_path = construct_path(current_username, parent_map)
             result_set.append(found_path)
             if len(result_set) == tree.solution_required:
-                print '\nFinal tree:'
-                print draw_tree(root.parse_tree_to_json())
+                print 'Final tree:'
+                print draw_tree(root.generate_tree())
                 return result_set
 
         children = tree.get_children(current_username)

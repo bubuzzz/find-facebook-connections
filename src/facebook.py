@@ -84,15 +84,15 @@ class Node:
         self.username = username
         self.children = children
 
-    def parse_tree_to_json(self):
-        js = dict()
-        current = js[self.username] = dict()
+    def generate_tree(self):
+        tree = dict()
+        current = tree[self.username] = dict()
         friends = current['friends'] = dict()
         children = self.children
         if children:
             for child in children:
-                friends.update(child.parse_tree_to_json())
-        return js
+                friends.update(child.generate_tree())
+        return tree
 
 
 class FacebookClient:
@@ -103,7 +103,7 @@ class FacebookClient:
             print "No cookies provided, start logging in..."
             raw_cookies = login_firefox()
             self.cookies = parse_cookies(raw_cookies)
-            print "cookies: ", self.cookies
+            print "Cookies: ", self.cookies
 
     def get_friends(self, username):
         url = facebook_url + username + '/friends'
