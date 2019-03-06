@@ -1,6 +1,37 @@
 from collections import deque
 from util import draw_tree
 from constants import SOLUTION_REQUIRED
+from facebook import FacebookClient
+
+cookies = None
+
+class Tree:
+    solution_required = 1  # NUMBER MUTUAL FRIENDS REQUIRED
+    client = FacebookClient(cookies)
+
+    def __init__(self):
+        self.root = self.client.get_myself_username()
+        self.goals = None
+
+    def get_root(self):
+        return self.root
+
+    def set_goals(self, username):
+        """
+        Get the friends of the target
+        """
+        children = self.client.get_friends(username)
+        self.goals = [child.username for child in children]
+        print 'goals: ', self.goals
+
+    def is_goal(self, username):
+        """
+        Check if the new user is in the goals set
+        """
+        return username in self.goals
+
+    def get_children(self, username):
+        return self.client.get_friends(username)
 
 def print_tree(tree):
     print 'Current tree: '
@@ -49,7 +80,6 @@ def bfs(tree):
             if len(result_set) == SOLUTION_REQUIRED:
                 print_tree(tree)
                 return result_set
-
 
 def construct_path(node_id, parent_map):
     path = list()
