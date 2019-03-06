@@ -1,11 +1,21 @@
-from algorithms import bfs, Tree
+from algorithms import Algorithm
 from config import target
+from facebook import FacebookClient
+from config import cookies
 
+def init(client):
+    username = client.get_myself_username()
+    goals = client.get_friends(target)
+    return (username, goals)
 
 if __name__ == '__main__':
-    tree = Tree()
-    tree.set_goals(target)
-    results = bfs(tree)
+    client = FacebookClient(cookies)
+    username, goals = init(client)
+    print 'Goals: %s' % goals
+
+    algorithm = Algorithm(username, goals, client)
+    results = []
+    results = algorithm.bfs()
 
     print '------------------------------------------'
     print "RESULT PATHS: %s\n" % '\n'.join(results)

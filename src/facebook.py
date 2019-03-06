@@ -78,32 +78,6 @@ def get_friends_of(friend_url, cookies):
     return friends
 
 
-
-class Node:
-    """
-    Hold the nested children and provide ways to parse the tree to
-    dict
-    """
-
-    def __init__(self, username, children={}):
-        self.username = username
-        self.children = children
-
-    def generate_tree(self):
-        """
-        Parse the nested node into dict
-        """
-        tree     = dict()
-        current  = tree[self.username] = dict()
-        friends  = current['friends'] = dict()
-        children = self.children
-
-        if children:
-            for child in children:
-                friends.update(child.generate_tree())
-        return tree
-
-
 class FacebookClient:
     """ A client to provide some services to connect to Facebook """
 
@@ -122,7 +96,7 @@ class FacebookClient:
         """
         url = FACEBOOK_URL + username + '/friends'
         friends = get_friends_of(url, self.cookies)
-        return [Node(friend_username) for friend_username in friends.keys()]
+        return [friend_username for friend_username in friends.keys()]
 
     def get_myself_username(self):
         """
@@ -130,4 +104,4 @@ class FacebookClient:
         """
         r = requests.get('%sme' % FACEBOOK_URL, cookies=self.cookies)
         username = r.url.split('/')[-1].split('?')[0]
-        return Node(username)
+        return username
