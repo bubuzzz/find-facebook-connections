@@ -85,7 +85,7 @@ class Node:
     dict
     """
 
-    def __init__(self, username, children=None):
+    def __init__(self, username, children={}):
         self.username = username
         self.children = children
 

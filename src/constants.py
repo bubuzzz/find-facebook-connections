@@ -1,4 +1,3 @@
-TARGET                     = "ebialylew"
 DEPTH                      = 3
 FACEBOOK_FRIENDS_THRESHOLD = 100
 SOLUTION_REQUIRED          = 1

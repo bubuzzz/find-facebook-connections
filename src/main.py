@@ -1,10 +1,10 @@
 from algorithms import bfs, Tree
-from constants import TARGET
+from config import target
 
 
 if __name__ == '__main__':
     tree = Tree()
-    tree.set_goals(TARGET)
+    tree.set_goals(target)
     results = bfs(tree)
 
     print '------------------------------------------'

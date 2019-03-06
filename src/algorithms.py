@@ -1,9 +1,8 @@
 from collections import deque
 from util import draw_tree
 from constants import SOLUTION_REQUIRED
+from config import cookies
 from facebook import FacebookClient
-
-cookies = None
 
 class Tree:
     solution_required = 1  # NUMBER MUTUAL FRIENDS REQUIRED
