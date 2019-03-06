@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from constants import *
+from collections import OrderedDict as od
 
 
 def login_firefox():
@@ -64,7 +65,7 @@ def get_friends_of(friend_url, cookies):
     list of the friend
     """
     startidx = 0
-    friends = {}
+    friends = od()
     done = False
     while not done:
         r = requests.get(friend_url, cookies=cookies)
