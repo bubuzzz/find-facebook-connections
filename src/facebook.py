@@ -42,7 +42,7 @@ def extract_friends(raw_html):
     Extract the friend list of the current friend page. Return the friend list
     and the next pagination link
     """
-    friends = {}
+    friends = OD()
     next_link = None
 
     content = BeautifulSoup(raw_html, features="html.parser").find('div', {"id": "root"})
@@ -64,7 +64,6 @@ def get_friends_of(friend_url, cookies):
     Go to the friend page of a user, then continue to navigate through the
     list of the friend
     """
-    startidx = 0
     friends = OD()
     done = False
     while not done:
@@ -91,6 +90,7 @@ class FacebookClient:
             self.cookies = parse_cookies(raw_cookies)
             print "Cookies: ", self.cookies
 
+
     def get_friends(self, username):
         """
         Crawl friends and update the node
@@ -98,6 +98,7 @@ class FacebookClient:
         url = FACEBOOK_URL + username + '/friends'
         friends = get_friends_of(url, self.cookies)
         return [friend_username for friend_username in friends.keys()]
+
 
     def get_myself_username(self):
         """
