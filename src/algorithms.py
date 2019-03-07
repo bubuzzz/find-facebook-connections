@@ -1,6 +1,7 @@
 from collections import deque
 from util import draw_tree
 from constants import SOLUTION_REQUIRED
+from collections import OrderedDict as OD
 
 class Node:
     def __init__ (self, name, children={}, parent=None):
@@ -30,14 +31,13 @@ class Node:
         """
         Parse the nested node into dict
         """
-        tree     = dict()
-        current  = tree[self.name] = dict()
-        friends  = current['friends'] = dict()
+        tree     = OD()
+        current  = tree[self.name] = OD()
         children = self.children
 
-        if children:
-            for child in children:
-                friends.update(child.generate_tree())
+        if self.children:
+            for child in self.children:
+                current.update(child.generate_tree())
         return tree
 
 class Algorithm:
