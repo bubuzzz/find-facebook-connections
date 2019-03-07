@@ -14,7 +14,6 @@ if __name__ == '__main__':
     print 'Goals: %s' % goals
 
     algorithm = Algorithm(username, goals, client)
-    results = []
     results = algorithm.bfs()
 
     print '------------------------------------------'
