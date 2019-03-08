@@ -26,6 +26,7 @@ class Node(object):
         self.name     = name
         self.children = children
         self.parent   = parent
+        self.depth    = 0
 
 
     def __eq__(self, other):
@@ -36,7 +37,7 @@ class Node(object):
         return "%s [parent: %s; depth: %s]" % (
                 self.name,
                 self.parent.name if self.parent != None else "",
-                self.get_depth())
+                self.depth)
 
 
     @property
@@ -51,6 +52,7 @@ class Node(object):
         if self._children:
             for child in self._children:
                 child.parent = self
+                child.depth = self.depth + 1
 
 
     def generate_tree(self):
@@ -66,14 +68,6 @@ class Node(object):
                 current.update(child.generate_tree())
         return tree
 
-    def get_depth(self):
-        depth = 0
-        node = self
-        while node.parent:
-            depth += 1
-            node = node.parent
-
-        return depth
 
 class Algorithm:
 
@@ -114,6 +108,10 @@ class Algorithm:
             if visited_nodes.get(current_node.name):
                 print 'User %s has been visited. Moving on' % current_node
                 continue
+
+            if current_node.depth > DEPTH:
+                continue
+
             if self.is_goal(current_node):
                 found_path = construct_path(current_node)
                 result_set.append(found_path)
@@ -152,6 +150,10 @@ class Algorithm:
             if visited_nodes.get(current_node.name):
                 print 'User %s has been visited. Moving on' % current_node
                 continue
+
+            if current_node.depth > DEPTH:
+                continue
+
             if self.is_goal(current_node):
                 found_path = construct_path(current_node)
                 result_set.append(found_path)
