@@ -14,7 +14,7 @@ if __name__ == '__main__':
     print 'Goals: %s' % goals
 
     algorithm = Algorithm(username, goals, client)
-    results = algorithm.dfs()
+    results = algorithm.bfs()
 
     print '------------------------------------------'
     print "RESULT PATHS: %s\n" % '\n'.join(results)
