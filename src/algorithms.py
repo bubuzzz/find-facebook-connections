@@ -1,6 +1,6 @@
 from collections import deque
 from util import draw_tree
-from constants import SOLUTION_REQUIRED
+from constants import SOLUTION_REQUIRED, DEPTH
 from config import target
 from collections import OrderedDict as OD
 
@@ -122,49 +122,47 @@ class Algorithm:
 
             visited_nodes[current_node.name] = True
 
+
     def dfs(self):
+        """
+        Using Depth first search to explore the nodes
+        """
         processing_nodes = deque()
-        visited_nodes = dict()
+        visited_nodes    = dict()
+        result_set       = OD()
+
         processing_nodes.append(self.root)
-
         while processing_nodes:
-            current_node = processing_nodes.popleft()
+            print '-----------------------------------------'
+            current_node = processing_nodes.pop()
+            result_set[current_node.name] = True
+            print 'Processing: %s' % current_node
+            if visited_nodes.get(current_node.name):
+                print 'User %s has been visited. Moving on' % current_node
+                continue
+            if self.is_goal(current_node):
+                found_path = construct_path(current_node)
+                result_set.append(found_path)
+                if len(result_set) == SOLUTION_REQUIRED:
+                    print_tree(self.root)
+                    return result_set
 
+            if len(result_set.keys()) > DEPTH:
+                del result_set[current_node.name]
+                continue
 
-
-    def dfs1(self):
-        friends_stack  = deque()
-        visited_nodes = dict()
-        parent_map    = dict()
-        result_set    = list()
-        parent_map    = dict()
-        root = self.root
-
-        print '-----------------------------------------'
-        current_username = node.username
-        visited_nodes[current_username] = True
-        print 'Processing: %s' % current_username
-        if len(friends_stack) > DEPTH + 1:
-            print 'Reach limit without result - ' + current_username
-        elif tree.is_goal(current_username):
-            found_path = construct_path(current_username, parent_map)
-            result_set.append(found_path)
-            if len(result_set) == SOLUTION_REQUIRED:
-                print_tree(tree)
-        elif len(tree.get_children(current_username)) == 0:
-            pass
-        else:
-            friends_stack.append(node)
-            children = tree.get_children(current_username)
-            result = False
+            # Expand the tree to the next level of the children list
+            children = self.get_children(current_node)
+            print_tree(self.root)
+            # pre-processing the children list. Check if duplicated then
+            # deleting that node, otherwise, adding it to the tree
             for idx, child in enumerate(children):
-                if visited_nodes.get(child.username):
+                if visited_nodes.get(child.name):
                     del children[idx]
                 else:
-                    parent_map[child.username] = current_username
-                    result = checkNode(tree, child, friends_stack, visited_nodes, parent_map, result_set)
-                    if result:
-                        break
-            if not result:
-                friends_stack.pop()
+                    current_node.children = children
+                    processing_nodes.append(child)
+
+            visited_nodes[current_node.name] = True
+            print result_set
 
