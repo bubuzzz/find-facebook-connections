@@ -94,10 +94,10 @@ class Algorithm:
         visited_nodes    = dict()
         result_set       = list()
 
-        processing_nodes.append(self.root)
+        processing_nodes.appendleft(self.root)
         while processing_nodes:
             print '-----------------------------------------'
-            current_node = processing_nodes.popleft()
+            current_node = processing_nodes.pop()
             print 'Processing: %s' % current_node
             if visited_nodes.get(current_node.name):
                 print 'User %s has been visited. Moving on' % current_node
@@ -118,7 +118,7 @@ class Algorithm:
                     del children[idx]
                 else:
                     current_node.children = children
-                    processing_nodes.append(child)
+                    processing_nodes.appendleft(child)
 
             visited_nodes[current_node.name] = True
 
@@ -135,7 +135,7 @@ class Algorithm:
         while processing_nodes:
             print '-----------------------------------------'
             current_node = processing_nodes.pop()
-            result_set[current_node.name] = True
+            # result_set[current_node.name] = True
             print 'Processing: %s' % current_node
             if visited_nodes.get(current_node.name):
                 print 'User %s has been visited. Moving on' % current_node
@@ -146,10 +146,6 @@ class Algorithm:
                 if len(result_set) == SOLUTION_REQUIRED:
                     print_tree(self.root)
                     return result_set
-
-            if len(result_set.keys()) > DEPTH:
-                del result_set[current_node.name]
-                continue
 
             # Expand the tree to the next level of the children list
             children = self.get_children(current_node)
@@ -164,5 +160,5 @@ class Algorithm:
                     processing_nodes.append(child)
 
             visited_nodes[current_node.name] = True
-            print result_set
+            # print result_set
 
