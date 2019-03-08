@@ -33,7 +33,10 @@ class Node(object):
 
 
     def __str__(self):
-        return "%s [%s]" % (self.name, self.parent.name if self.parent != None else "")
+        return "%s [parent: %s; depth: %s]" % (
+                self.name,
+                self.parent.name if self.parent != None else "",
+                self.get_depth())
 
 
     @property
@@ -62,6 +65,15 @@ class Node(object):
             for child in self.children:
                 current.update(child.generate_tree())
         return tree
+
+    def get_depth(self):
+        depth = 0
+        node = self
+        while node.parent:
+            depth += 1
+            node = node.parent
+
+        return depth
 
 class Algorithm:
 
@@ -129,7 +141,7 @@ class Algorithm:
         """
         processing_nodes = deque()
         visited_nodes    = dict()
-        result_set       = OD()
+        result_set       = list()
 
         processing_nodes.append(self.root)
         while processing_nodes:
