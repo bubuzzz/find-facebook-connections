@@ -5,7 +5,8 @@
 ```pip install -r requirements.txt```
 
 - Install gecko driver
-   (MacOS) ```brew install geckodriver```
+
+(MacOS) ```brew install geckodriver```
 
 ## Run
 ``` python main.py```
