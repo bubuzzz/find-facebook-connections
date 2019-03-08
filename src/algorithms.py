@@ -52,12 +52,12 @@ class Node(object):
         if self._children:
             for child in self._children:
                 child.parent = self
-                child.depth = self.depth + 1
+                child.depth  = self.depth + 1
 
 
     def generate_tree(self):
         """
-        Parse the nested node into dict
+        Parse the nested node into nested dict
         """
         tree     = OD()
         current  = tree[self.name] = OD()
@@ -174,5 +174,3 @@ class Algorithm:
                     processing_nodes.append(child)
 
             visited_nodes[current_node.name] = True
-            # print result_set
-
